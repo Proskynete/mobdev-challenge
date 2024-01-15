@@ -12,7 +12,7 @@ const App = () => {
     queryKey: ["GET_PAGINATED_DOGS"],
     queryFn: () => DogAPI.getAll(),
     onSuccess: (data) => {
-      const _dogs = Object.entries(data?.message || {}).splice(0, 15);
+      const _dogs = Object.entries(data?.message || {}).splice(0, 12);
       setDogs(_dogs);
     },
   });

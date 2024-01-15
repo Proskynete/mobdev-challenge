@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { DogAPI } from "../../services/api";
 import { useState } from "react";
@@ -7,6 +7,7 @@ import { QUERY_KEYS } from "../../queries/constants";
 
 const SubBreedInfoView = () => {
   const { breed, subBreed } = useParams();
+  const navigate = useNavigate();
   const [images, setImages] = useState<string[]>([]);
 
   const { isFetching, refetch } = useQuery({
@@ -23,6 +24,10 @@ const SubBreedInfoView = () => {
     },
   });
 
+  const handleClick = () => {
+    navigate(`/breed/${breed}`);
+  };
+
   return (
     <ViewWrapper
       loading={isFetching}
@@ -33,7 +38,12 @@ const SubBreedInfoView = () => {
         <div className="mb-8">
           <p className="text-2xl font-bold text-white">
             Raza seleccionada:
-            <span className="capitalize text-blue-500 ml-2">{breed}</span>
+            <span
+              className="capitalize text-blue-500 ml-2 cursor-pointer"
+              onClick={handleClick}
+            >
+              {breed}
+            </span>
           </p>
 
           <div className="flex text-white">

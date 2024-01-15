@@ -59,7 +59,10 @@ const BreedInfoView = () => {
               <p className="flex capitalize text-blue-500 ml-2">
                 {subBreed.map((subBreedName, i) => (
                   <Fragment key={`${subBreedName}-${i}`}>
-                    <span onClick={() => handleClick(subBreedName)}>
+                    <span
+                      onClick={() => handleClick(subBreedName)}
+                      className="cursor-pointer"
+                    >
                       {subBreedName}
                     </span>
                     {i < subBreed.length - 1 ? ", " : ""}

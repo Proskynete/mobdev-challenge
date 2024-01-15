@@ -4,6 +4,7 @@ import { AllAPIResponse } from "../interfaces";
 type Breed = [string, string[]][];
 
 export interface ConfigProviderProps {
+  allBreeds: Breed;
   breeds: Breed;
   handleSetBreeds: (data: AllAPIResponse) => void;
 }
@@ -11,6 +12,7 @@ export interface ConfigProviderProps {
 export const defaultBreedValues: Breed = [];
 
 const BreedContext = createContext<ConfigProviderProps>({
+  allBreeds: defaultBreedValues,
   breeds: defaultBreedValues,
   handleSetBreeds: () => {},
 });
@@ -19,6 +21,12 @@ export const BreedProvider = ({
   children,
   breeds,
 }: PropsWithChildren<ConfigProviderProps>) => {
+  const [allBreedsState, setAllBreedsState] = useState<Breed>(() => {
+    const _breeds = localStorage.getItem("breeds");
+    if (_breeds) return JSON.parse(_breeds);
+    return breeds;
+  });
+
   const [breedsState, setBreedsState] = useState<Breed>(() => {
     const _breeds = localStorage.getItem("breeds");
     if (_breeds) return JSON.parse(_breeds);
@@ -31,12 +39,17 @@ export const BreedProvider = ({
     const max = min + 15;
 
     localStorage.setItem("breeds", JSON.stringify(entries));
+    setAllBreedsState(entries);
     setBreedsState(entries.slice(min, max));
   };
 
   return (
     <BreedContext.Provider
-      value={{ breeds: breedsState, handleSetBreeds: handleSetBreedsState }}
+      value={{
+        allBreeds: allBreedsState,
+        breeds: breedsState,
+        handleSetBreeds: handleSetBreedsState,
+      }}
     >
       {children}
     </BreedContext.Provider>

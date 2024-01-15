@@ -3,12 +3,12 @@ import { useQuery } from "react-query";
 import { DogAPI } from "../../services/api";
 import { Fragment, useEffect, useState } from "react";
 import { ViewWrapper } from "../../components/view-wrapper";
-import { useGetFetchQuery } from "../../queries";
+import { useFetchQuery } from "../../hooks/useFetchQuery";
 import { QUERY_KEYS } from "../../queries/constants";
 import { AllAPIResponse } from "../../interfaces";
 
 const BreedInfoView = () => {
-  const breeds = useGetFetchQuery<AllAPIResponse>(QUERY_KEYS.GET_ALL_BREEDS);
+  const breeds = useFetchQuery<AllAPIResponse>(QUERY_KEYS.GET_ALL_BREEDS);
   const navigate = useNavigate();
   const [subBreed, setSubBreed] = useState<string[] | null>(null);
   const { breed } = useParams();

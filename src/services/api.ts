@@ -11,7 +11,6 @@ const getAllBreeds = async () => {
 };
 
 const getBreedRandomImagesByName = async (breed: string) => {
-  console.log(breed);
   const { data } = await client.get<GetRandomImagesResponse>(
     `/api/breed/${breed}/images`
   );

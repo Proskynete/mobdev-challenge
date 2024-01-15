@@ -1,26 +1,15 @@
-import { ChangeEvent } from "react";
+import { SelectHTMLAttributes } from "react";
 
-interface SelectProps {
-  id?: string;
+interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
   defaultLabel?: string;
   options: [string, string[]][] | string[];
-  value?: string;
-  onChange: (e: ChangeEvent<HTMLSelectElement>) => void;
 }
 
-const Select = ({
-  defaultLabel,
-  id,
-  options,
-  value,
-  onChange,
-}: SelectProps) => {
+const Select = ({ defaultLabel, options, ...rest }: SelectProps) => {
   return (
     <select
-      id={id}
+      {...rest}
       className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-      onChange={onChange}
-      value={value}
     >
       <option value="">{defaultLabel || "Selecciona una opción"}</option>
 

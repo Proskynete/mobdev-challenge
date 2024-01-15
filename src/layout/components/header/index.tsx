@@ -2,6 +2,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { useBreed } from "../../../hooks/useBreed";
 import { useNavigate, useParams } from "react-router-dom";
 import { Select } from "../../../components/select";
+import { Button } from "../../../components/button";
 
 interface Filter {
   breed?: string;
@@ -71,47 +72,40 @@ const Header = () => {
     <div className="flex flex-col justify-center items-center bg-gray-800 px-6 py-4">
       <h1 className="text-2xl font-bold text-white">mobdev challenge!</h1>
       <p className="text-center text-white">
-        Encuentra imágenes (en forma aleatoria) de perros de raza.
+        Encuentra imágenes (en forma aleatoria) de perros por raza y sub-raza.
       </p>
 
-      <div className="w-full max-w-xl mt-6 flex flex-row justify-center items-center gap-4">
-        <p>FILTROS:</p>
+      <div className="w-full max-w-xl mt-6 flex flex-col gap-4 md:flex-row md:justify-between md:items-center">
+        <p className="text-white">FILTROS:</p>
 
-        <div className="w-full max-w-sm flex flex-row justify-center items-center gap-4">
-          <Select
-            id="breeds"
-            defaultLabel="Selecciona una raza"
-            options={allBreeds}
-            value={filter.breed || ""}
-            onChange={handleSelectBreed}
-          />
-        </div>
+        <Select
+          id="breeds"
+          defaultLabel="Selecciona una raza"
+          options={allBreeds}
+          value={filter.breed || ""}
+          onChange={handleSelectBreed}
+        />
 
-        <div className="w-full max-w-sm flex flex-row justify-center items-center gap-4">
-          <Select
-            id="subBreeds"
-            defaultLabel="Selecciona una sub-raza"
-            options={subBreeds!}
-            value={filter.subBreed || ""}
-            onChange={handleSelectSubBreed}
-          />
-        </div>
-
-        <button
-          className="bg-blue-500 !disabled:pointer-events-none !disabled:hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
-          onClick={handleSearch}
+        <Select
+          id="subBreeds"
+          defaultLabel="Selecciona una sub-raza"
+          options={subBreeds || []}
+          value={filter.subBreed || ""}
+          onChange={handleSelectSubBreed}
           disabled={!filter.breed}
-        >
-          Buscar
-        </button>
+        />
 
-        <button
-          className="!disabled:pointer-events-none !disabled:text-gray-400 !disabled:hover:text-gray-700 text-white rounded disabled:opacity-50"
+        <Button onClick={handleSearch} disabled={!filter.breed}>
+          Buscar
+        </Button>
+
+        <Button
+          variant="outlined"
           onClick={handleClear}
-          disabled={filter === initialFilter}
+          disabled={!filter.breed || !filter.subBreed}
         >
           Limpiar
-        </button>
+        </Button>
       </div>
     </div>
   );

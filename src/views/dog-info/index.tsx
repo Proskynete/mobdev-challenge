@@ -1,22 +1,37 @@
 import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { DogAPI } from "../../services/api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LoadingView } from "../../components/loading-view";
+import { useGetFetchQuery } from "../../queries";
+import { QUERY_KEYS } from "../../queries/constants";
+import { AllAPIResponse } from "../../interfaces";
 
 const DogInfoView = () => {
+  const dogs = useGetFetchQuery<AllAPIResponse>(QUERY_KEYS.GET_ALL_DOGS);
+  const [subBreed, setSubBreed] = useState<string[] | null>(null);
   const { name } = useParams();
   const [images, setImages] = useState<string[]>([]);
 
+  useEffect(() => {
+    if (dogs) {
+      const entries = Object.entries(dogs?.message || {});
+      const dog = entries.find(([dogName]) => dogName === name);
+      setSubBreed(dog?.[1] || null);
+    }
+  }, [dogs, name]);
+
   const { isFetching, refetch } = useQuery({
-    queryKey: ["GET_IMAGES_BY_NAME", name],
+    queryKey: [QUERY_KEYS.GET_IMAGE_BY_DOG_NAME, name],
     queryFn: () => DogAPI.getRandomImagesByName(name!),
     onSuccess: (data) => {
       const entries = Object.entries(data?.message || {});
-      const min = Math.floor(Math.random() * (entries.length - 18));
-      const max = min + 18;
-
-      setImages(entries.slice(min, max).map(([, url]) => url));
+      if (entries.length < 18) return setImages(entries.map(([, url]) => url));
+      else {
+        const min = Math.floor(Math.random() * (entries.length - 18));
+        const max = min + 18;
+        setImages(entries.slice(min, max).map(([, url]) => url));
+      }
     },
   });
 
@@ -24,13 +39,24 @@ const DogInfoView = () => {
     <LoadingView
       loading={isFetching}
       noResults={!isFetching && !images}
-      refetch={refetch}
+      refetch={images.length >= 18 && refetch}
     >
-      <div className="flex flex-col justify-center items-center">
+      <div className="flex flex-col">
         <div className="mb-8">
           <p className="text-2xl font-bold text-white">
             Raza seleccionada:
             <span className="capitalize text-blue-500 ml-2">{name}</span>
+          </p>
+
+          <p className="text-white">
+            Sub-razas:
+            {subBreed?.length ? (
+              <span className="capitalize text-blue-500 ml-2">
+                {subBreed.join(", ")}
+              </span>
+            ) : (
+              <span className="capitalize ml-2">Ninguna 🐾</span>
+            )}
           </p>
         </div>
 

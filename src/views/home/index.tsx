@@ -3,6 +3,7 @@ import { useQuery } from "react-query";
 import { DogAPI } from "../../services/api";
 import { Card } from "../../components/card";
 import { LoadingView } from "../../components/loading-view";
+import { QUERY_KEYS } from "../../queries/constants";
 
 type Dog = [string, string[]][];
 
@@ -10,7 +11,7 @@ const HomeView = () => {
   const [dogs, setDogs] = useState<Dog | null>(null);
 
   const { isFetching, refetch } = useQuery({
-    queryKey: ["GET_PAGINATED_DOGS"],
+    queryKey: [QUERY_KEYS.GET_ALL_DOGS],
     queryFn: () => DogAPI.getAll(),
     onSuccess: (data) => {
       const entries = Object.entries(data?.message || {});

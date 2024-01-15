@@ -3,7 +3,7 @@ import { PropsWithChildren } from "react";
 interface LoadingViewProps {
   loading: boolean;
   noResults: boolean;
-  refetch?: () => void;
+  refetch?: (() => void) | boolean;
 }
 
 export const LoadingView = ({
@@ -33,7 +33,7 @@ export const LoadingView = ({
               <button
                 className="bg-gray-800 text-white font-bold py-2 px-4 rounded hover:bg-gray-700 transition duration-200"
                 onClick={() => {
-                  refetch();
+                  if (typeof refetch === "function") refetch();
                 }}
               >
                 Volver a buscar

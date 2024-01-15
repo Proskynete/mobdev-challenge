@@ -4,7 +4,7 @@ import "./assets/styles/app-utilities.css";
 import { QueryClient, QueryClientProvider } from "react-query";
 
 import ReactDOM from "react-dom/client";
-import { App } from "./app.tsx";
+import { App } from "./application.tsx";
 
 const queryClient = new QueryClient({
   defaultOptions: {

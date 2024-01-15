@@ -6,7 +6,11 @@ const router = createBrowserRouter(routesConfig);
 
 const App = () => {
   return (
-    <BreedProvider breeds={defaultBreedValues} handleSetBreeds={() => {}}>
+    <BreedProvider
+      allBreeds={[]}
+      breeds={defaultBreedValues}
+      handleSetBreeds={() => {}}
+    >
       <RouterProvider router={router} />
     </BreedProvider>
   );

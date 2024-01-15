@@ -8,6 +8,12 @@ jest.mock("react-router-dom", () => ({
   useNavigate: jest.fn(),
 }));
 
+jest.mock("../../../services/api.ts", () => ({
+  DogAPI: {
+    getBreedImageByName: jest.fn(),
+  },
+}));
+
 describe("components/card", () => {
   it("should render component with default props - create snapshot", () => {
     (useQuery as jest.Mock).mockReturnValue({
@@ -45,5 +51,17 @@ describe("components/card", () => {
 
     fireEvent.click(screen.getByText("bulldog"));
     expect(navigate).toHaveBeenCalledWith("/breed/bulldog");
+  });
+
+  it("should render image when data is loaded", () => {
+    (useQuery as jest.Mock).mockReturnValue({
+      data: { message: "image-url" },
+      isLoading: true,
+    });
+    (useNavigate as jest.Mock).mockReturnValue(jest.fn());
+
+    render(<Card name="bulldog" />);
+
+    expect(screen.getByTestId("skeleton")).toBeInTheDocument();
   });
 });

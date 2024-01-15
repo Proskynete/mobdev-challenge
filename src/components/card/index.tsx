@@ -25,7 +25,10 @@ const Card = ({ name }: CardProps) => {
       onClick={handleClick}
     >
       {isLoading ? (
-        <div className="w-32 h-32 rounded-full bg-gray-700 animate-pulse" />
+        <div
+          data-testid="skeleton"
+          className="w-32 h-32 rounded-full bg-gray-700 animate-pulse"
+        />
       ) : (
         <img
           src={data?.message}

@@ -13,7 +13,7 @@ const MainLayout = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-900 text-white">
-      <div className="grid grid-rows-[auto,1fr,auto] flex-grow">
+      <div className="grid grid-rows-[auto,1fr,auto] flex-grow w-full">
         <Header />
 
         <div className="w-full max-w-6xl mx-auto px-4 sm:px-6 py-10 flex-grow">

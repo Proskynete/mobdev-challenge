@@ -44,14 +44,23 @@ const Header = () => {
   };
 
   const handleSelectSubBreed = (e: ChangeEvent<HTMLSelectElement>) => {
-    const subBreeds = e.target.value;
-    setFilter((prev) => ({ ...prev, subBreed: subBreeds }));
+    const subBreed = e.target.value;
+    setFilter((prev) => ({ ...prev, subBreed: subBreed }));
   };
 
   const handleSearch = () => {
-    if (filter.subBreed && filter.breed)
+    if (filter.breed && !filter.subBreed) {
+      navigate(`/breed/${filter.breed}`);
+    }
+    if (filter.subBreed && filter.breed) {
       navigate(`/breed/${filter.breed}/sub-breed/${filter.subBreed}`);
-    if (filter.breed) navigate(`/breed/${filter.breed}`);
+    }
+  };
+
+  const handleClear = () => {
+    navigate("/");
+    setFilter(initialFilter);
+    setSubBreeds(null);
   };
 
   return (
@@ -62,31 +71,42 @@ const Header = () => {
       </p>
 
       <div className="w-full max-w-xl mt-6 flex flex-row justify-center items-center gap-4">
-        FILTROS:
+        <p>FILTROS:</p>
+
         <div className="w-full max-w-sm flex flex-row justify-center items-center gap-4">
           <Select
             id="breeds"
             defaultLabel="Selecciona una raza"
             options={allBreeds}
-            value={filter.breed}
+            value={filter.breed || undefined}
             onChange={handleSelectBreed}
           />
         </div>
+
         <div className="w-full max-w-sm flex flex-row justify-center items-center gap-4">
           <Select
             id="subBreeds"
             defaultLabel="Selecciona una sub-raza"
             options={subBreeds!}
-            value={filter.subBreed}
+            value={filter.subBreed || undefined}
             onChange={handleSelectSubBreed}
           />
         </div>
+
         <button
           className="bg-blue-500 !disabled:pointer-events-none !disabled:hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50"
           onClick={handleSearch}
           disabled={!filter.breed}
         >
           Buscar
+        </button>
+
+        <button
+          className="!disabled:pointer-events-none !disabled:text-gray-400 !disabled:hover:text-gray-700 text-white rounded disabled:opacity-50"
+          onClick={handleClear}
+          disabled={filter === initialFilter}
+        >
+          Limpiar
         </button>
       </div>
     </div>

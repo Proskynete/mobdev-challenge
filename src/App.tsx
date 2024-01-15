@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { DogAPI } from "./services/dog_api";
+import { DogAPI } from "./services/api";
 import { useQuery } from "react-query";
 import { Card } from "./components/card";
 

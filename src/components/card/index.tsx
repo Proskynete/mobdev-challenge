@@ -1,5 +1,5 @@
 import { useQuery } from "react-query";
-import { DogAPI } from "../../services/dog_api";
+import { DogAPI } from "../../services/api";
 
 interface CardProps {
   name: string;

@@ -12,8 +12,11 @@ const App = () => {
     queryKey: ["GET_PAGINATED_DOGS"],
     queryFn: () => DogAPI.getAll(),
     onSuccess: (data) => {
-      const _dogs = Object.entries(data?.message || {}).splice(0, 12);
-      setDogs(_dogs);
+      const entries = Object.entries(data?.message || {});
+      const min = Math.floor(Math.random() * (entries.length - 15));
+      const max = min + 15;
+
+      setDogs(entries.slice(min, max));
     },
   });
 

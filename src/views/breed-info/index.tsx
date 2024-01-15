@@ -41,14 +41,14 @@ const BreedInfoView = () => {
       noResults={!isFetching && !images}
       refetch={images.length >= 18 && refetch}
     >
-      <div className="flex flex-col">
+      <div className="flex flex-col min-w-full">
         <div className="mb-8">
           <p className="text-2xl font-bold text-white">
             Raza seleccionada:
             <span className="capitalize text-blue-500 ml-2">{breed}</span>
           </p>
 
-          <div className="flex text-white ">
+          <div className="flex text-white">
             Sub-razas:
             {subBreed?.length ? (
               <p className="flex capitalize text-blue-500 ml-2">
@@ -69,7 +69,7 @@ const BreedInfoView = () => {
           {images?.map((url, i) => (
             <div
               key={`${breed}-${i}`}
-              className="flex flex-col justify-center items-center bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition duration-200 cursor-pointer"
+              className="flex flex-col justify-center items-center bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition duration-200"
             >
               <img
                 src={url}

@@ -10,9 +10,9 @@ const getAll = async () => {
   return data;
 };
 
-const getRandomImagesByName = async (name: string) => {
+const getRandomImagesByName = async (breed: string) => {
   const { data } = await client.get<GetRandomImagesResponse>(
-    `/api/breed/${name}/images`
+    `/api/breed/${breed}/images`
   );
   return data;
 };

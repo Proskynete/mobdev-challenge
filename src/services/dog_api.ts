@@ -1,4 +1,4 @@
-import { AllAPIResponse } from "../interfaces";
+import { AllAPIResponse, ImageAPIResponse } from "../interfaces";
 import { client } from "../utils/api";
 import RESPONSE_DATA from "./__mock__.json";
 
@@ -12,18 +12,18 @@ const getAll = async () => {
     setTimeout(() => {
       const data = RESPONSE_DATA;
       resolve(data);
-    }, 3000);
+    }, 1000);
   });
 };
 
-const getImages = async (breed: string) => {
-  const { data } = await client.get<AllAPIResponse>(
-    `/api/breed/${breed}/images`
+const getImageByName = async (breed: string) => {
+  const { data } = await client.get<ImageAPIResponse>(
+    `/api/breed/${breed}/images/random`
   );
   return data;
 };
 
 export const DogAPI = {
   getAll,
-  getImages,
+  getImageByName,
 };

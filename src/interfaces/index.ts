@@ -4,3 +4,8 @@ export interface AllAPIResponse {
   };
   status: string;
 }
+
+export interface ImageAPIResponse {
+  message: string;
+  status: string;
+}

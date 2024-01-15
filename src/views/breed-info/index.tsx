@@ -1,7 +1,7 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { DogAPI } from "../../services/api";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { ViewWrapper } from "../../components/view-wrapper";
 import { useGetFetchQuery } from "../../queries";
 import { QUERY_KEYS } from "../../queries/constants";
@@ -11,7 +11,6 @@ const BreedInfoView = () => {
   const breeds = useGetFetchQuery<AllAPIResponse>(QUERY_KEYS.GET_ALL_BREEDS);
   const [subBreed, setSubBreed] = useState<string[] | null>(null);
   const { breed } = useParams();
-  const navigate = useNavigate();
   const [images, setImages] = useState<string[]>([]);
 
   useEffect(() => {
@@ -36,10 +35,6 @@ const BreedInfoView = () => {
     },
   });
 
-  const handleClick = (subBreedName: string) => {
-    navigate(`/breed/${breed}/sub-breed/${subBreedName}`);
-  };
-
   return (
     <ViewWrapper
       loading={isFetching}
@@ -53,38 +48,32 @@ const BreedInfoView = () => {
             <span className="capitalize text-blue-500 ml-2">{breed}</span>
           </p>
 
-          <p className="flex text-white ">
+          <div className="flex text-white ">
             Sub-razas:
             {subBreed?.length ? (
               <p className="flex capitalize text-blue-500 ml-2">
                 {subBreed.map((subBreedName, i) => (
-                  <>
-                    <span
-                      key={`${subBreedName}-${i}`}
-                      onClick={() => handleClick(subBreedName)}
-                      className="cursor-pointer"
-                    >
-                      {subBreedName}
-                    </span>
+                  <Fragment key={`${subBreedName}-${i}`}>
+                    <span>{subBreedName}</span>
                     {i < subBreed.length - 1 ? ", " : ""}
-                  </>
+                  </Fragment>
                 ))}
               </p>
             ) : (
               <span className="capitalize ml-2">Ninguna 🐾</span>
             )}
-          </p>
+          </div>
         </div>
 
         <div className="flex flex-wrap justify-center items-center gap-6">
           {images?.map((url, i) => (
             <div
-              key={`${name}-${i}`}
+              key={`${breed}-${i}`}
               className="flex flex-col justify-center items-center bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition duration-200 cursor-pointer"
             >
               <img
                 src={url}
-                alt={`${name}-${i}`}
+                alt={`${breed}-${i}`}
                 className={`w-32 h-32 rounded-full object-cover object-center border-4 border-gray-700`}
                 width="128"
                 height="128"

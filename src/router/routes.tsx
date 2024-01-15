@@ -18,10 +18,6 @@ export const routesConfig = [
             index: true,
             element: <BreedInfoView />,
           },
-          {
-            path: "sub-breed/:subBreedName",
-            element: <>Sub-breed</>,
-          },
         ],
       },
     ],

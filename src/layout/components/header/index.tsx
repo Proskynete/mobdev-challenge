@@ -45,10 +45,14 @@ const Header = () => {
 
   const handleSelectSubBreed = (e: ChangeEvent<HTMLSelectElement>) => {
     const subBreed = e.target.value;
-    setFilter((prev) => ({ ...prev, subBreed: subBreed }));
+    setFilter({ ...filter, subBreed: subBreed });
   };
 
   const handleSearch = () => {
+    if (!filter.breed && !filter.subBreed) {
+      navigate("/");
+    }
+
     if (filter.breed && !filter.subBreed) {
       navigate(`/breed/${filter.breed}`);
     }
@@ -78,7 +82,7 @@ const Header = () => {
             id="breeds"
             defaultLabel="Selecciona una raza"
             options={allBreeds}
-            value={filter.breed || undefined}
+            value={filter.breed || ""}
             onChange={handleSelectBreed}
           />
         </div>
@@ -88,7 +92,7 @@ const Header = () => {
             id="subBreeds"
             defaultLabel="Selecciona una sub-raza"
             options={subBreeds!}
-            value={filter.subBreed || undefined}
+            value={filter.subBreed || ""}
             onChange={handleSelectSubBreed}
           />
         </div>

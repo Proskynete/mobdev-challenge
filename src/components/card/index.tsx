@@ -1,18 +1,28 @@
 import { useQuery } from "react-query";
 import { DogAPI } from "../../services/api";
+import { useNavigate } from "react-router-dom";
 
 interface CardProps {
   name: string;
 }
 
 const Card = ({ name }: CardProps) => {
+  const navigate = useNavigate();
+
   const { data, isLoading } = useQuery({
     queryKey: ["GET_DOG_IMAGE_BY_NAME", name],
     queryFn: () => DogAPI.getImageByName(name),
   });
 
+  const handleClick = () => {
+    navigate(`/${name}`);
+  };
+
   return (
-    <div className="flex flex-col justify-center items-center bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition duration-200 cursor-pointer">
+    <div
+      className="flex flex-col justify-center items-center bg-gray-800 rounded-lg p-4 hover:bg-gray-700 transition duration-200 cursor-pointer"
+      onClick={handleClick}
+    >
       {isLoading ? (
         <div className="w-32 h-32 rounded-full bg-gray-700 animate-pulse" />
       ) : (

@@ -7,7 +7,7 @@
 
 <div align="center">
 
-[Link](https://vercel.com/proskynete/mobdev-challenge-15-01/9jPw9NwzBybWhbmVsUUNZYNaMbfk)
+[Link](https://mobdev-challenge-15-01.vercel.app/)
 
 </div>
 

@@ -1,6 +1,7 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { useBreed } from "../../../hooks/useBreed";
 import { useNavigate, useParams } from "react-router-dom";
+import { Select } from "../../../components/select";
 
 interface Filter {
   breed?: string;
@@ -42,6 +43,11 @@ const Header = () => {
     }
   };
 
+  const handleSelectSubBreed = (e: ChangeEvent<HTMLSelectElement>) => {
+    const subBreeds = e.target.value;
+    setFilter((prev) => ({ ...prev, subBreed: subBreeds }));
+  };
+
   const handleSearch = () => {
     if (filter.subBreed && filter.breed)
       navigate(`/breed/${filter.breed}/sub-breed/${filter.subBreed}`);
@@ -58,42 +64,22 @@ const Header = () => {
       <div className="w-full max-w-xl mt-6 flex flex-row justify-center items-center gap-4">
         FILTROS:
         <div className="w-full max-w-sm flex flex-row justify-center items-center gap-4">
-          <select
+          <Select
             id="breeds"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            onChange={handleSelectBreed}
+            defaultLabel="Selecciona una raza"
+            options={allBreeds}
             value={filter.breed}
-          >
-            <option value="" selected disabled>
-              Selecciona una raza
-            </option>
-            {allBreeds?.map(([name]) => (
-              <option key={name} value={name}>
-                {name}
-              </option>
-            ))}
-          </select>
+            onChange={handleSelectBreed}
+          />
         </div>
         <div className="w-full max-w-sm flex flex-row justify-center items-center gap-4">
-          <select
+          <Select
             id="subBreeds"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            onChange={(e) => {
-              const subBreeds = e.target.value;
-              setFilter((prev) => ({ ...prev, subBreed: subBreeds }));
-            }}
-            value={filter.breed}
-            disabled={!filter.breed || subBreeds?.length === 0}
-          >
-            <option value="" selected>
-              Selecciona una sub raza
-            </option>
-            {subBreeds?.map((name) => (
-              <option key={name} value={name}>
-                {name}
-              </option>
-            ))}
-          </select>
+            defaultLabel="Selecciona una sub-raza"
+            options={subBreeds!}
+            value={filter.subBreed}
+            onChange={handleSelectSubBreed}
+          />
         </div>
         <button
           className="bg-blue-500 !disabled:pointer-events-none !disabled:hover:bg-blue-700 text-white font-bold py-2 px-4 rounded disabled:opacity-50"

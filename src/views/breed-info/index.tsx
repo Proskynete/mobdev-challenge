@@ -1,29 +1,30 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
 import { DogAPI } from "../../services/api";
 import { useEffect, useState } from "react";
-import { LoadingView } from "../../components/loading-view";
+import { ViewWrapper } from "../../components/view-wrapper";
 import { useGetFetchQuery } from "../../queries";
 import { QUERY_KEYS } from "../../queries/constants";
 import { AllAPIResponse } from "../../interfaces";
 
-const DogInfoView = () => {
-  const dogs = useGetFetchQuery<AllAPIResponse>(QUERY_KEYS.GET_ALL_DOGS);
+const BreedInfoView = () => {
+  const breeds = useGetFetchQuery<AllAPIResponse>(QUERY_KEYS.GET_ALL_BREEDS);
   const [subBreed, setSubBreed] = useState<string[] | null>(null);
-  const { name } = useParams();
+  const { breed } = useParams();
+  const navigate = useNavigate();
   const [images, setImages] = useState<string[]>([]);
 
   useEffect(() => {
-    if (dogs) {
-      const entries = Object.entries(dogs?.message || {});
-      const dog = entries.find(([dogName]) => dogName === name);
-      setSubBreed(dog?.[1] || null);
+    if (breeds) {
+      const entries = Object.entries(breeds?.message || {});
+      const _breed = entries.find(([_dogName]) => _dogName === breed);
+      setSubBreed(_breed?.[1] || null);
     }
-  }, [dogs, name]);
+  }, [breeds, breed]);
 
   const { isFetching, refetch } = useQuery({
-    queryKey: [QUERY_KEYS.GET_IMAGE_BY_DOG_NAME, name],
-    queryFn: () => DogAPI.getRandomImagesByName(name!),
+    queryKey: [QUERY_KEYS.GET_IMAGES_BY_BREED_NAME, breed],
+    queryFn: () => DogAPI.getRandomImagesByName(breed!),
     onSuccess: (data) => {
       const entries = Object.entries(data?.message || {});
       if (entries.length < 18) return setImages(entries.map(([, url]) => url));
@@ -35,8 +36,12 @@ const DogInfoView = () => {
     },
   });
 
+  const handleClick = (subBreedName: string) => {
+    navigate(`/breed/${breed}/sub-breed/${subBreedName}`);
+  };
+
   return (
-    <LoadingView
+    <ViewWrapper
       loading={isFetching}
       noResults={!isFetching && !images}
       refetch={images.length >= 18 && refetch}
@@ -45,15 +50,26 @@ const DogInfoView = () => {
         <div className="mb-8">
           <p className="text-2xl font-bold text-white">
             Raza seleccionada:
-            <span className="capitalize text-blue-500 ml-2">{name}</span>
+            <span className="capitalize text-blue-500 ml-2">{breed}</span>
           </p>
 
-          <p className="text-white">
+          <p className="flex text-white ">
             Sub-razas:
             {subBreed?.length ? (
-              <span className="capitalize text-blue-500 ml-2">
-                {subBreed.join(", ")}
-              </span>
+              <p className="flex capitalize text-blue-500 ml-2">
+                {subBreed.map((subBreedName, i) => (
+                  <>
+                    <span
+                      key={`${subBreedName}-${i}`}
+                      onClick={() => handleClick(subBreedName)}
+                      className="cursor-pointer"
+                    >
+                      {subBreedName}
+                    </span>
+                    {i < subBreed.length - 1 ? ", " : ""}
+                  </>
+                ))}
+              </p>
             ) : (
               <span className="capitalize ml-2">Ninguna 🐾</span>
             )}
@@ -78,8 +94,8 @@ const DogInfoView = () => {
           ))}
         </div>
       </div>
-    </LoadingView>
+    </ViewWrapper>
   );
 };
 
-export default DogInfoView;
+export default BreedInfoView;

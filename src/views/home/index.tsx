@@ -2,38 +2,38 @@ import { useState } from "react";
 import { useQuery } from "react-query";
 import { DogAPI } from "../../services/api";
 import { Card } from "../../components/card";
-import { LoadingView } from "../../components/loading-view";
+import { ViewWrapper } from "../../components/view-wrapper";
 import { QUERY_KEYS } from "../../queries/constants";
 
-type Dog = [string, string[]][];
+type Breed = [string, string[]][];
 
 const HomeView = () => {
-  const [dogs, setDogs] = useState<Dog | null>(null);
+  const [breeds, setBreeds] = useState<Breed | null>(null);
 
   const { isFetching, refetch } = useQuery({
-    queryKey: [QUERY_KEYS.GET_ALL_DOGS],
+    queryKey: [QUERY_KEYS.GET_ALL_BREEDS],
     queryFn: () => DogAPI.getAll(),
     onSuccess: (data) => {
       const entries = Object.entries(data?.message || {});
       const min = Math.floor(Math.random() * (entries.length - 15));
       const max = min + 15;
 
-      setDogs(entries.slice(min, max));
+      setBreeds(entries.slice(min, max));
     },
   });
 
   return (
-    <LoadingView
+    <ViewWrapper
       loading={isFetching}
-      noResults={!isFetching && !dogs}
+      noResults={!isFetching && !breeds}
       refetch={refetch}
     >
       <div className="flex flex-col justify-center items-center">
         <div className="flex flex-wrap justify-center items-center gap-6">
-          {dogs?.map(([name]) => <Card key={name} name={name} />)}
+          {breeds?.map(([name]) => <Card key={name} name={name} />)}
         </div>
       </div>
-    </LoadingView>
+    </ViewWrapper>
   );
 };
 

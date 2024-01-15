@@ -1,6 +1,7 @@
 import { useQuery } from "react-query";
 import { DogAPI } from "../../services/api";
 import { useNavigate } from "react-router-dom";
+import { QUERY_KEYS } from "../../queries/constants";
 
 interface CardProps {
   name: string;
@@ -10,12 +11,12 @@ const Card = ({ name }: CardProps) => {
   const navigate = useNavigate();
 
   const { data, isLoading } = useQuery({
-    queryKey: ["GET_DOG_IMAGE_BY_NAME", name],
+    queryKey: [QUERY_KEYS.GET_IMAGE_BY_BREED_NAME, name],
     queryFn: () => DogAPI.getImageByName(name),
   });
 
   const handleClick = () => {
-    navigate(`/${name}`);
+    navigate(`/breed/${name}`);
   };
 
   return (

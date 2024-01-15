@@ -1,5 +1,5 @@
 import MainLayout from "../layout/main";
-import DogInfoView from "../views/dog-info";
+import BreedInfoView from "../views/breed-info";
 import HomeView from "../views/home";
 
 export const routesConfig = [
@@ -12,8 +12,17 @@ export const routesConfig = [
         element: <HomeView />,
       },
       {
-        path: ":name",
-        element: <DogInfoView />,
+        path: "breed/:breed",
+        children: [
+          {
+            index: true,
+            element: <BreedInfoView />,
+          },
+          {
+            path: "sub-breed/:subBreedName",
+            element: <>Sub-breed</>,
+          },
+        ],
       },
     ],
   },

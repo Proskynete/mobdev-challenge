@@ -1,17 +1,17 @@
 import { PropsWithChildren } from "react";
 
-interface LoadingViewProps {
+interface ViewWrapperProps {
   loading: boolean;
   noResults: boolean;
   refetch?: (() => void) | boolean;
 }
 
-export const LoadingView = ({
+const ViewWrapper = ({
   loading,
   noResults,
   children,
   refetch,
-}: PropsWithChildren<LoadingViewProps>) => {
+}: PropsWithChildren<ViewWrapperProps>) => {
   return (
     <>
       {loading ? (
@@ -45,3 +45,5 @@ export const LoadingView = ({
     </>
   );
 };
+
+export { ViewWrapper };

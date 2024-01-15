@@ -5,19 +5,30 @@ import {
 } from "../interfaces";
 import { client } from "../utils/api";
 
-const getAll = async () => {
+const getAllBreeds = async () => {
   const { data } = await client.get<AllAPIResponse>("/api/breeds/list/all");
   return data;
 };
 
-const getRandomImagesByName = async (breed: string) => {
+const getBreedRandomImagesByName = async (breed: string) => {
+  console.log(breed);
   const { data } = await client.get<GetRandomImagesResponse>(
     `/api/breed/${breed}/images`
   );
   return data;
 };
 
-const getImageByName = async (breed: string) => {
+const getSubBreedRandomImagesByName = async (
+  breed: string,
+  subBreed: string
+) => {
+  const { data } = await client.get<GetRandomImagesResponse>(
+    `/api/breed/${breed}/${subBreed}/images`
+  );
+  return data;
+};
+
+const getBreedImageByName = async (breed: string) => {
   const { data } = await client.get<ImageAPIResponse>(
     `/api/breed/${breed}/images/random`
   );
@@ -25,7 +36,8 @@ const getImageByName = async (breed: string) => {
 };
 
 export const DogAPI = {
-  getAll,
-  getRandomImagesByName,
-  getImageByName,
+  getAllBreeds,
+  getBreedRandomImagesByName,
+  getSubBreedRandomImagesByName,
+  getBreedImageByName,
 };

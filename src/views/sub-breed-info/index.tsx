@@ -1,30 +1,17 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useQuery } from "react-query";
 import { DogAPI } from "../../services/api";
-import { Fragment, useEffect, useState } from "react";
+import { useState } from "react";
 import { ViewWrapper } from "../../components/view-wrapper";
-import { useGetFetchQuery } from "../../queries";
 import { QUERY_KEYS } from "../../queries/constants";
-import { AllAPIResponse } from "../../interfaces";
 
-const BreedInfoView = () => {
-  const breeds = useGetFetchQuery<AllAPIResponse>(QUERY_KEYS.GET_ALL_BREEDS);
-  const navigate = useNavigate();
-  const [subBreed, setSubBreed] = useState<string[] | null>(null);
-  const { breed } = useParams();
+const SubBreedInfoView = () => {
+  const { breed, subBreed } = useParams();
   const [images, setImages] = useState<string[]>([]);
 
-  useEffect(() => {
-    if (breeds) {
-      const entries = Object.entries(breeds?.message || {});
-      const _breed = entries.find(([_dogName]) => _dogName === breed);
-      setSubBreed(_breed?.[1] || null);
-    }
-  }, [breeds, breed]);
-
   const { isFetching, refetch } = useQuery({
-    queryKey: [QUERY_KEYS.GET_IMAGES_BY_BREED_NAME, breed],
-    queryFn: () => DogAPI.getBreedRandomImagesByName(breed!),
+    queryKey: [QUERY_KEYS.GET_IMAGES_BY_SUB_BREED_NAME, breed, subBreed],
+    queryFn: () => DogAPI.getSubBreedRandomImagesByName(breed!, subBreed!),
     onSuccess: (data) => {
       const entries = Object.entries(data?.message || {});
       if (entries.length < 18) return setImages(entries.map(([, url]) => url));
@@ -35,10 +22,6 @@ const BreedInfoView = () => {
       }
     },
   });
-
-  const handleClick = (subBreedName: string) => {
-    navigate(`/breed/${breed}/sub-breed/${subBreedName}`);
-  };
 
   return (
     <ViewWrapper
@@ -54,21 +37,8 @@ const BreedInfoView = () => {
           </p>
 
           <div className="flex text-white">
-            Sub-razas:
-            {subBreed?.length ? (
-              <p className="flex capitalize text-blue-500 ml-2">
-                {subBreed.map((subBreedName, i) => (
-                  <Fragment key={`${subBreedName}-${i}`}>
-                    <span onClick={() => handleClick(subBreedName)}>
-                      {subBreedName}
-                    </span>
-                    {i < subBreed.length - 1 ? ", " : ""}
-                  </Fragment>
-                ))}
-              </p>
-            ) : (
-              <span className="capitalize ml-2">Ninguna 🐾</span>
-            )}
+            Sub-raza seleccionada:
+            <span className="capitalize text-blue-500 ml-2">{subBreed}</span>
           </div>
         </div>
 
@@ -94,4 +64,4 @@ const BreedInfoView = () => {
   );
 };
 
-export default BreedInfoView;
+export default SubBreedInfoView;

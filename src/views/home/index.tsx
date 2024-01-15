@@ -12,7 +12,7 @@ const HomeView = () => {
 
   const { isFetching, refetch } = useQuery({
     queryKey: [QUERY_KEYS.GET_ALL_BREEDS],
-    queryFn: () => DogAPI.getAll(),
+    queryFn: () => DogAPI.getAllBreeds(),
     onSuccess: (data) => {
       const entries = Object.entries(data?.message || {});
       const min = Math.floor(Math.random() * (entries.length - 15));

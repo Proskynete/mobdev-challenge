@@ -12,7 +12,7 @@ const Card = ({ name }: CardProps) => {
 
   const { data, isLoading } = useQuery({
     queryKey: [QUERY_KEYS.GET_IMAGE_BY_BREED_NAME, name],
-    queryFn: () => DogAPI.getImageByName(name),
+    queryFn: () => DogAPI.getBreedImageByName(name),
   });
 
   const handleClick = () => {

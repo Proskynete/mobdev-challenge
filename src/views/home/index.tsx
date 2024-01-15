@@ -1,24 +1,18 @@
-import { useState } from "react";
 import { useQuery } from "react-query";
 import { DogAPI } from "../../services/api";
 import { Card } from "../../components/card";
 import { ViewWrapper } from "../../components/view-wrapper";
 import { QUERY_KEYS } from "../../queries/constants";
-
-type Breed = [string, string[]][];
+import { useBreed } from "../../hooks/useBreed";
 
 const HomeView = () => {
-  const [breeds, setBreeds] = useState<Breed | null>(null);
+  const { breeds, handleSetBreeds } = useBreed();
 
   const { isFetching, refetch } = useQuery({
     queryKey: [QUERY_KEYS.GET_ALL_BREEDS],
     queryFn: () => DogAPI.getAllBreeds(),
     onSuccess: (data) => {
-      const entries = Object.entries(data?.message || {});
-      const min = Math.floor(Math.random() * (entries.length - 15));
-      const max = min + 15;
-
-      setBreeds(entries.slice(min, max));
+      handleSetBreeds(data);
     },
   });
 
